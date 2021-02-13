@@ -7,7 +7,6 @@ import softuni.demo.model.entity.CategoryName;
 import softuni.demo.repository.CategoryRepository;
 import softuni.demo.service.CategoryService;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 @Service
@@ -30,5 +29,11 @@ public class CategoryServiceImpl implements CategoryService {
                                         String.format("Description for %s",categoryName.name())));
                     }));
         }
+    }
+
+    @Override
+    public Category findByCategoryName(CategoryName categoryName) {
+        return this.categoryRepository.findByName(categoryName)
+                .orElse(null);
     }
 }

@@ -52,7 +52,7 @@ public class UsersController {
             return "redirect:login";
         }
        httpSession.setAttribute("user",user);
-        return "home";
+        return "redirect:/";
     }
     @GetMapping("/register")
     public String register(){
