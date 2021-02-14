@@ -3,10 +3,8 @@ package softuni.demo.web;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import softuni.demo.model.binding.ItemAddBindingModel;
 import softuni.demo.model.service.ItemServiceModel;
@@ -40,6 +38,17 @@ public class ItemsController {
             return "redirect:add";
         }
         this.itemService.addItem(this.modelMapper.map(itemAddBindingModel, ItemServiceModel.class));
-        return  "home";
+        return  "redirect:/";
+    }
+    @GetMapping("/details")
+    public ModelAndView details(@RequestParam("id") String id, ModelAndView modelAndView){
+        modelAndView.addObject("item",this.itemService.findById(id));
+        modelAndView.setViewName("details-item");
+        return modelAndView;
+    }
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id")String id){
+        this.itemService.delete(id);
+        return  "redirect:/";
     }
 }
