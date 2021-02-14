@@ -29,7 +29,11 @@ public class UsersController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model){
+        if(!model.containsAttribute("userLoginBindingModel")){
+            model.addAttribute("userLoginBindingModel",new UserLoginBindingModel());
+            model.addAttribute("notFound",false);
+        }
         return "login";
     }
 
@@ -55,12 +59,15 @@ public class UsersController {
         return "redirect:/";
     }
     @GetMapping("/register")
-    public String register(){
+    public String register(Model model){
+        if(!model.containsAttribute("userRegisterBindingModel")){
+            model.addAttribute("userRegisterBindingModel",new UserRegisterBindingModel());
+        }
 
         return "register";
     }
     @PostMapping("/register")
-    public String registerConfirm(@Valid @ModelAttribute UserRegisterBindingModel userRegisterBindingModel,
+    public String registerConfirm(@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel userRegisterBindingModel,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes){
 
@@ -76,5 +83,10 @@ public class UsersController {
                             .map(userRegisterBindingModel,UserServiceModel.class));
         }
         return"redirect:login";
+    }
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession){
+        httpSession.invalidate();
+        return "redirect:/";
     }
 }
